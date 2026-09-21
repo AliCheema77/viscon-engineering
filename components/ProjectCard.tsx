@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Project, ProjectCategory, ProjectStatus } from "@/content/projects";
 
-const categoryFallbackImage: Record<ProjectCategory, string> = {
+export const categoryFallbackImage: Record<ProjectCategory, string> = {
   commercial: "/images/expertise/commercial.jpg",
   farmhouse: "/images/expertise/farmhouse.jpg",
   residential: "/images/expertise/residential.jpg",
@@ -11,7 +11,7 @@ const categoryFallbackImage: Record<ProjectCategory, string> = {
   "civil-works": "/images/expertise/civil-works.jpg",
 };
 
-const statusLabel: Record<ProjectStatus, string> = {
+export const statusLabel: Record<ProjectStatus, string> = {
   completed: "Completed",
   ongoing: "Ongoing",
   "in-progress": "In Progress",

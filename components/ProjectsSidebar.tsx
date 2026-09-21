@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ProjectCategory } from "@/content/projects";
 
-const categories: { slug: ProjectCategory; title: string }[] = [
+export const categories: { slug: ProjectCategory; title: string }[] = [
   { slug: "commercial", title: "Commercial" },
   { slug: "farmhouse", title: "Farmhouse" },
   { slug: "residential", title: "Residential" },

@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import Container from "@/components/ui/Container";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectsSidebar, { type StatusBucket } from "@/components/ProjectsSidebar";
 import { projects, type ProjectCategory } from "@/content/projects";
+
+export const metadata: Metadata = {
+  title: "Projects | Viscon Engineering",
+  description:
+    "Browse Viscon Engineering's completed and ongoing projects across commercial, residential, farmhouse, MEP, chemical proofing, and civil works.",
+};
 
 function isStatusBucket(value: string | undefined): value is StatusBucket {
   return value === "ongoing" || value === "completed";
