@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Container from "@/components/ui/Container";
 import ProjectsSidebar, { categories } from "@/components/ProjectsSidebar";
@@ -10,6 +11,24 @@ import { projects } from "@/content/projects";
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/projects/[slug]">): Promise<Metadata> {
+  const { slug } = await params;
+  const project = projects.find((item) => item.slug === slug);
+
+  if (!project) {
+    return {};
+  }
+
+  return {
+    title: `${project.title} | Viscon Engineering`,
+    description:
+      project.description ??
+      `${project.title} — a Viscon Engineering project in ${project.location}.`,
+  };
 }
 
 export default async function ProjectDetailPage({
