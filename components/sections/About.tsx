@@ -5,7 +5,7 @@ import { company } from "@/content/company";
 
 export default function About() {
   return (
-    <section className="bg-white py-20">
+    <section id="about" className="scroll-mt-20 bg-white py-20">
       <Container className="flex flex-col gap-16">
         <div className="flex flex-col gap-10">
           <SectionHeading

@@ -1,5 +1,6 @@
 import TeamMemberCard from "@/components/TeamMemberCard";
-import { team, type TeamGroup } from "@/content/team";
+import type { TeamGroup } from "@/content/team";
+import { getTeamMembers } from "@/sanity/lib/queries";
 
 const groupOrder: { key: TeamGroup; label: string }[] = [
   { key: "executive", label: "Executive" },
@@ -9,7 +10,9 @@ const groupOrder: { key: TeamGroup; label: string }[] = [
   { key: "site-staff", label: "Site Staff" },
 ];
 
-export default function TeamGrid() {
+export default async function TeamGrid() {
+  const team = await getTeamMembers();
+
   return (
     <div className="flex flex-col gap-12">
       {groupOrder.map(({ key, label }) => {

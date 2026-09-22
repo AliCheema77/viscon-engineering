@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Container from "@/components/ui/Container";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectsSidebar, { type StatusBucket } from "@/components/ProjectsSidebar";
-import { projects, type ProjectCategory } from "@/content/projects";
+import type { ProjectCategory } from "@/content/projects";
+import { getProjects } from "@/sanity/lib/queries";
 
 export const metadata: Metadata = {
   title: "Projects | Viscon Engineering",
@@ -38,6 +39,8 @@ export default async function ProjectsPage({
   const activeCategory = isProjectCategory(categoryParam)
     ? categoryParam
     : undefined;
+
+  const projects = await getProjects();
 
   const filteredProjects = projects
     .filter((project) => {

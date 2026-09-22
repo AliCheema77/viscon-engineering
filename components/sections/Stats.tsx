@@ -1,21 +1,25 @@
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { projects } from "@/content/projects";
 import { services } from "@/content/services";
-import { team } from "@/content/team";
+import { getProjects, getTeamMembers } from "@/sanity/lib/queries";
 
 const OFFICE_COUNT = 2;
 
 const pad = (value: number) => value.toString().padStart(2, "0");
 
-const stats = [
-  { label: "Projects", value: pad(projects.length) },
-  { label: "Service Lines", value: pad(services.length) },
-  { label: "Offices", value: pad(OFFICE_COUNT) },
-  { label: "Team Members", value: pad(team.length) },
-];
+export default async function Stats() {
+  const [projects, team] = await Promise.all([
+    getProjects(),
+    getTeamMembers(),
+  ]);
 
-export default function Stats() {
+  const stats = [
+    { label: "Projects", value: pad(projects.length) },
+    { label: "Service Lines", value: pad(services.length) },
+    { label: "Offices", value: pad(OFFICE_COUNT) },
+    { label: "Team Members", value: pad(team.length) },
+  ];
+
   return (
     <section className="bg-white py-20">
       <Container className="flex flex-col gap-10">

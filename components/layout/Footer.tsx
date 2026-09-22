@@ -5,7 +5,19 @@ import { usePathname } from "next/navigation";
 import { companyLinks } from "@/content/nav";
 import { services } from "@/content/services";
 
-const partnerPlaceholders = [1, 2, 3, 4];
+const associatePlaceholders = [
+  "Alpine Developers",
+  "Metro Build Co.",
+  "Crestline Group",
+  "Horizon Contractors",
+];
+
+const groupPlaceholders = [
+  "Viscon Holdings",
+  "Greenline Estates",
+  "Union Infra",
+  "Northgate Ventures",
+];
 
 export default function Footer() {
   const pathname = usePathname();
@@ -20,12 +32,12 @@ export default function Footer() {
               The Associate
             </p>
             <div className="flex flex-wrap gap-4">
-              {partnerPlaceholders.map((n) => (
+              {associatePlaceholders.map((name) => (
                 <div
-                  key={`associate-${n}`}
-                  className="flex h-[110px] w-[200px] items-center justify-center rounded bg-white/10 text-sm text-white/40"
+                  key={name}
+                  className="flex h-[110px] w-[200px] items-center justify-center rounded bg-white/10 px-4 text-center font-display text-sm font-bold uppercase tracking-wide text-white/40"
                 >
-                  Logo
+                  {name}
                 </div>
               ))}
             </div>
@@ -35,12 +47,12 @@ export default function Footer() {
               The Group
             </p>
             <div className="flex flex-wrap gap-4">
-              {partnerPlaceholders.map((n) => (
+              {groupPlaceholders.map((name) => (
                 <div
-                  key={`group-${n}`}
-                  className="flex h-[110px] w-[200px] items-center justify-center rounded bg-white/10 text-sm text-white/40"
+                  key={name}
+                  className="flex h-[110px] w-[200px] items-center justify-center rounded bg-white/10 px-4 text-center font-display text-sm font-bold uppercase tracking-wide text-white/40"
                 >
-                  Logo
+                  {name}
                 </div>
               ))}
             </div>

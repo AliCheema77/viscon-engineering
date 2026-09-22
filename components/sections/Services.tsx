@@ -38,7 +38,7 @@ const categories: { slug: ProjectCategory; title: string; image: string }[] = [
 
 export default function Services() {
   return (
-    <section className="py-20">
+    <section id="expertise" className="scroll-mt-20 py-20">
       <Container className="flex flex-col gap-10">
         <SectionHeading
           eyebrow="What We Do"

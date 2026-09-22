@@ -7,9 +7,10 @@ import ProjectCard, {
   categoryFallbackImage,
   statusLabel,
 } from "@/components/ProjectCard";
-import { projects } from "@/content/projects";
+import { getProjects } from "@/sanity/lib/queries";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const projects = await getProjects();
   return projects.map((project) => ({ slug: project.slug }));
 }
 
@@ -17,6 +18,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/projects/[slug]">): Promise<Metadata> {
   const { slug } = await params;
+  const projects = await getProjects();
   const project = projects.find((item) => item.slug === slug);
 
   if (!project) {
@@ -35,6 +37,7 @@ export default async function ProjectDetailPage({
   params,
 }: PageProps<"/projects/[slug]">) {
   const { slug } = await params;
+  const projects = await getProjects();
   const project = projects.find((item) => item.slug === slug);
 
   if (!project) {
