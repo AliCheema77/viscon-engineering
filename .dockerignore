@@ -1,0 +1,35 @@
+# Dependencies & build output — reinstalled / rebuilt inside the image
+node_modules
+.next
+out
+build
+coverage
+*.tsbuildinfo
+next-env.d.ts
+
+# Secrets — never bake env files into an image
+.env*
+
+# Git, IDE & tooling
+.git
+.gitignore
+.github
+.idea
+.vscode
+.claude
+.mcp.json
+
+# Docker files themselves
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Docs & large files not needed at runtime
+*.md
+*.pptx
+
+# Logs & OS junk
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
