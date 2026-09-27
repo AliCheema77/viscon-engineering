@@ -1,0 +1,17 @@
+# Run with:  docker compose --env-file .env.local up --build
+# --env-file lets Compose fill in the ${...} values below from .env.local.
+
+services:
+  web:
+    build:
+      context: .                 # send this folder to Docker (minus .dockerignore)
+      dockerfile: Dockerfile
+      args:                      # become the ARG values in the builder stage
+        NEXT_PUBLIC_SANITY_PROJECT_ID: ${NEXT_PUBLIC_SANITY_PROJECT_ID}
+        NEXT_PUBLIC_SANITY_DATASET: ${NEXT_PUBLIC_SANITY_DATASET}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+    image: viscon-engineering:latest
+    container_name: viscon-web
+    ports:
+      - "3000:3000"              # <your laptop port>:<container port>
+    restart: unless-stopped
