@@ -1,0 +1,67 @@
+# CI = Continuous Integration: every push / PR is automatically checked
+# on a fresh GitHub-hosted machine, so broken code is caught early.
+
+name: CI
+
+# When should this workflow run?
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Values available to every job. They come from
+# GitHub → repo Settings → Secrets and variables → Actions → Variables tab.
+# (NEXT_PUBLIC_* are public anyway, so "variables" is fine — not "secrets".)
+env:
+  NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ vars.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+  NEXT_PUBLIC_SANITY_DATASET: ${{ vars.NEXT_PUBLIC_SANITY_DATASET }}
+  NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  # ---------- Job 1: lint + build the app with plain Node ----------
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v5
+
+      - name: Install Node 22
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm            # reuse downloaded packages between runs
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+  # ---------- Job 2: prove the Dockerfile still builds ----------
+  docker:
+    needs: check              # only runs if "check" passed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v5
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false                       # learning only — just build it
+          tags: viscon-engineering:ci
+          build-args: |
+            NEXT_PUBLIC_SANITY_PROJECT_ID=${{ env.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+            NEXT_PUBLIC_SANITY_DATASET=${{ env.NEXT_PUBLIC_SANITY_DATASET }}
+            NEXT_PUBLIC_SITE_URL=${{ env.NEXT_PUBLIC_SITE_URL }}
+          cache-from: type=gha              # reuse layers from earlier runs
+          cache-to: type=gha,mode=max
