@@ -1,0 +1,27 @@
+# Dependabot = a GitHub bot that checks for newer versions of what we use
+# and opens a pull request for each update. CI then tests that PR for us.
+
+version: 2
+updates:
+  # 1. npm packages (package.json / package-lock.json)
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # bundle small, safe updates into ONE PR instead of many
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  # 2. GitHub Actions used in .github/workflows (checkout, setup-node, ...)
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+
+  # 3. Docker base image in the Dockerfile (node:22-alpine)
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
