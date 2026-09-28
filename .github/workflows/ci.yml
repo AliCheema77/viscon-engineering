@@ -42,10 +42,16 @@ jobs:
       - name: Build
         run: npm run build
 
-  # ---------- Job 2: prove the Dockerfile still builds ----------
+  # ---------- Job 2: build the image, push it to GHCR on main ----------
   docker:
     needs: check              # only runs if "check" passed
     runs-on: ubuntu-latest
+    permissions:
+      contents: read          # to check out the code
+      packages: write         # to push images to ghcr.io
+    env:
+      # GHCR image names must be lowercase
+      IMAGE: ghcr.io/alicheema77/viscon-engineering
     steps:
       - name: Get the code
         uses: actions/checkout@v5
@@ -53,12 +59,23 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build image (no push)
+      # GITHUB_TOKEN is created automatically for every run — no secret to add
+      - name: Log in to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build image (push only on main)
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: false                       # learning only — just build it
-          tags: viscon-engineering:ci
+          push: ${{ github.event_name == 'push' }}   # PRs: build only
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
           build-args: |
             NEXT_PUBLIC_SANITY_PROJECT_ID=${{ env.NEXT_PUBLIC_SANITY_PROJECT_ID }}
             NEXT_PUBLIC_SANITY_DATASET=${{ env.NEXT_PUBLIC_SANITY_DATASET }}
