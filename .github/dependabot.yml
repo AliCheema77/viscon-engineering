@@ -13,6 +13,15 @@ updates:
       # bundle small, safe updates into ONE PR instead of many
       minor-and-patch:
         update-types: [minor, patch]
+    # Major versions can break the build — upgrade these by hand when ready.
+    # Minor/patch updates for them still come through.
+    ignore:
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+      - dependency-name: eslint
+        update-types: [version-update:semver-major]
+      - dependency-name: "@types/node"          # must match Node 22 we run
+        update-types: [version-update:semver-major]
 
   # 2. GitHub Actions used in .github/workflows (checkout, setup-node, ...)
   - package-ecosystem: github-actions
@@ -25,3 +34,7 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # stay on Node 22 LTS; bump the major version by hand
+      - dependency-name: node
+        update-types: [version-update:semver-major]
